@@ -3,14 +3,14 @@ services:
     image: 'postgres:15-alpine'
     container_name: global-finance-db
     ports:
-      - '5432:5432'
+      - '5433:5432'
     environment:
       - 'POSTGRES_DB=global_finance_db'
-      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_PASSWORD=admin123'
       - 'POSTGRES_USER=user'
     volumes:
-      - 'postgres_data:/var/lib/postgresql/data'
+      - 'postgres_data_new:/var/lib/postgresql/data'
     restart: always
 
 volumes:
-  postgres_data:
+  postgres_data_new:
