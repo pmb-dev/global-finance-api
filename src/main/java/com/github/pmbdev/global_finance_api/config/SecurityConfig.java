@@ -1,4 +1,4 @@
-package com.github.Pablo0_mb.global_finance_api.config;
+package com.github.pmbdev.global_finance_api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
-package com.github.Pablo0_mb.global_finance_api.controller;
+package com.github.pmbdev.global_finance_api.controller;
 
-import com.github.Pablo0_mb.global_finance_api.repository.entity.UserEntity;
-import com.github.Pablo0_mb.global_finance_api.service.UserService;
+import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
+import com.github.pmbdev.global_finance_api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +20,13 @@ public class UserController {
 
         //201 code (CREATED) to reply
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
+    @PostMapping("/login") // login request
+    public ResponseEntity<String> login(@RequestBody com.github.pmbdev.global_finance_api.controller.dto.LoginRequest loginRequest) {
+
+        String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+
+        return ResponseEntity.ok(token);
     }
 }

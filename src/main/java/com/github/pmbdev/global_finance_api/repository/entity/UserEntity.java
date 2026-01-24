@@ -1,4 +1,4 @@
-package com.github.Pablo0_mb.global_finance_api.repository.entity;
+package com.github.pmbdev.global_finance_api.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
