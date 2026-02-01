@@ -38,6 +38,18 @@ public class JwtUtils {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public boolean isTokenValid(String token, String username){
+        final String usernameInToken = extractUsername(token);
+        return (usernameInToken.equals(username) && !isTokenExpired(token));
+    }
+
+    public boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
+    }
     // --- Other methods ---
 
     // Transforms the text from the YAML file into a cryptographic key
@@ -60,4 +72,5 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
 }

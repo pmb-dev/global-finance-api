@@ -17,3 +17,10 @@ Content-Type: application/json
   "email": "pabloEncoder3@finance.com",
   "password": "hi123456"
 }
+
+### Trying to access without token
+GET http://localhost:8080/api/users/demo
+
+### Accessing with previous token
+GET http://localhost:8080/api/users/demo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXIzQGZpbmFuY2UuY29tIiwiaWF0IjoxNzY5OTg2MjI2LCJleHAiOjE3NzAwNzI2MjZ9.dD61zHJxqK3shkSkRfJLmEGwUQWRfJoh2agFK7U4J10

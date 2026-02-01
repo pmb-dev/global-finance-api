@@ -14,7 +14,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping // For POST queries
+    @PostMapping("/register") // For POST queries
     public ResponseEntity<UserEntity> register(@RequestBody UserEntity user){
         UserEntity savedUser = userService.createUser(user);
 
@@ -28,5 +28,12 @@ public class UserController {
         String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
         return ResponseEntity.ok(token);
+    }
+
+    // The URL is /api/demo
+    // It doesn't start with /api/users, Spring Security will block it
+    @GetMapping("/demo")
+    public ResponseEntity<String> demo() {
+        return ResponseEntity.ok("Hi! If you read this it's because you have a valid token.");
     }
 }
