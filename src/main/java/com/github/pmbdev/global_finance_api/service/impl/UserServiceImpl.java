@@ -18,6 +18,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserEntity createUser(UserEntity user){
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists.");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword())); //To encode the password before saving it
         return userRepository.save(user);
     }

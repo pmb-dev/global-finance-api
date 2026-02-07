@@ -1,4 +1,4 @@
-package com.github.pmbdev.global_finance_api.service;
+package com.github.pmbdev.global_finance_api.service.impl;
 
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;

@@ -1,12 +1,11 @@
 ### Create a new user
-
-POST http://localhost:8080/api/users
+POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
   "name": "Pablo Barahona",
-  "email": "pabloEncoder3@finance.com",
-  "password": "hi123456"
+  "email": "pabloEncoder1@finance.com",
+  "password": "hi1234"
 }
 
 ### Login to get the token
@@ -14,8 +13,8 @@ POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "email": "pabloEncoder3@finance.com",
-  "password": "hi123456"
+  "email": "pabloEncoder1@finance.com",
+  "password": "hi1234"
 }
 
 ### Trying to access without token
@@ -24,3 +23,12 @@ GET http://localhost:8080/api/users/demo
 ### Accessing with previous token
 GET http://localhost:8080/api/users/demo
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXIzQGZpbmFuY2UuY29tIiwiaWF0IjoxNzY5OTg2MjI2LCJleHAiOjE3NzAwNzI2MjZ9.dD61zHJxqK3shkSkRfJLmEGwUQWRfJoh2agFK7U4J10
+
+### Create a new account (token needed)
+POST http://localhost:8080/api/accounts
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA0OTMxNTIsImV4cCI6MTc3MDU3OTU1Mn0.Kh2IEqySdpHAs-rdY01ni5sX4nSoGEFnCbaVRrWJSt4
+Content-Type: application/json
+
+### See my accounts
+GET http://localhost:8080/api/accounts
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA0OTMxNTIsImV4cCI6MTc3MDU3OTU1Mn0.Kh2IEqySdpHAs-rdY01ni5sX4nSoGEFnCbaVRrWJSt4
