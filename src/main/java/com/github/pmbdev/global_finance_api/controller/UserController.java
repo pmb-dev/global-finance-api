@@ -2,6 +2,7 @@ package com.github.pmbdev.global_finance_api.controller;
 
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.service.UserService;
+import com.github.pmbdev.global_finance_api.controller.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register") // For POST queries
+    @PostMapping("/register") // To POST queries
     public ResponseEntity<UserEntity> register(@RequestBody UserEntity user){
         UserEntity savedUser = userService.createUser(user);
 
@@ -22,8 +23,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-    @PostMapping("/login") // login request
-    public ResponseEntity<String> login(@RequestBody com.github.pmbdev.global_finance_api.controller.dto.LoginRequest loginRequest) {
+    @PostMapping("/login") // To login request
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
 
         String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
 

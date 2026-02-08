@@ -3,17 +3,20 @@ POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "name": "Pablo Barahona",
-  "email": "pabloEncoder1@finance.com",
+  "name": "Mark Garcia",
+  "email": "markgarcia@finance.com",
   "password": "hi1234"
 }
+
+//pabloEncoder@finance.com - hi1234
+//markgarcia@finance.com - hi1234
 
 ### Login to get the token
 POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "email": "pabloEncoder1@finance.com",
+  "email": "pabloEncoder@finance.com",
   "password": "hi1234"
 }
 
@@ -26,9 +29,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXIzQGZpbmFuY
 
 ### Create a new account (token needed)
 POST http://localhost:8080/api/accounts
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA0OTMxNTIsImV4cCI6MTc3MDU3OTU1Mn0.Kh2IEqySdpHAs-rdY01ni5sX4nSoGEFnCbaVRrWJSt4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJrZ2FyY2lhQGZpbmFuY2UuY29tIiwiaWF0IjoxNzcwNTA3MTk2LCJleHAiOjE3NzA1OTM1OTZ9.zO7rnd-N5t_FCRGF2p9EKVbIgYBC4szGRnDZKdEkcoo
 Content-Type: application/json
+
+// pabloEncoder1: ES24-4215-2426-7544-5775-8395 , ES24-9184-7443-9134-5687-5280
+// markgarcia: ES24-9524-5642-8238-2843-2358
 
 ### See my accounts
 GET http://localhost:8080/api/accounts
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA0OTMxNTIsImV4cCI6MTc3MDU3OTU1Mn0.Kh2IEqySdpHAs-rdY01ni5sX4nSoGEFnCbaVRrWJSt4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MDc0NTAsImV4cCI6MTc3MDU5Mzg1MH0.bC5tMMI925u1VuYvZ7XNsQ_2uX-jaBvl4CCRqIBO5tY
+
+### Transfer amount
+POST http://localhost:8080/api/transactions/transfer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MDc0NTAsImV4cCI6MTc3MDU5Mzg1MH0.bC5tMMI925u1VuYvZ7XNsQ_2uX-jaBvl4CCRqIBO5tY
+Content-Type: application/json
+
+{
+  "targetAccountNumber": "ES24-9524-5642-8238-2843-2358",
+  "amount": 100.50
+}

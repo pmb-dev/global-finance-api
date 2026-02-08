@@ -1,0 +1,36 @@
+package com.github.pmbdev.global_finance_api.repository.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity // To make the code to database
+@Table(name = "transactions") // Name of the table in the database
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TransactionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private BigDecimal amount;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_account_id", nullable = false)
+    private AccountEntity sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_account_id", nullable = false)
+    private AccountEntity receiver;
+
+
+
+}
