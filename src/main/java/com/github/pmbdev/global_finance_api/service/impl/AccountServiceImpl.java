@@ -64,4 +64,13 @@ public class AccountServiceImpl implements AccountService {
         return "ES24-" + s;
     }
 
+    @Override
+    public void deposit(String accountNumber, BigDecimal amount) {
+        AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Account not found."));
+
+        account.setBalance(account.getBalance().add(amount));
+        accountRepository.save(account);
+    }
+
 }

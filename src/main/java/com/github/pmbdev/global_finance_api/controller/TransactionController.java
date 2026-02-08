@@ -17,6 +17,7 @@ public class TransactionController {
     @PostMapping("/transfer")
     public ResponseEntity<TransactionEntity> transfer(@RequestBody TransferRequest request) {
         TransactionEntity transaction = transactionService.transfer(
+                request.getSourceAccountNumber(),
                 request.getTargetAccountNumber(),
                 request.getAmount()
         );

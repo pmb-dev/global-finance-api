@@ -37,14 +37,25 @@ Content-Type: application/json
 
 ### See my accounts
 GET http://localhost:8080/api/accounts
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MDc0NTAsImV4cCI6MTc3MDU5Mzg1MH0.bC5tMMI925u1VuYvZ7XNsQ_2uX-jaBvl4CCRqIBO5tY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MTE0ODYsImV4cCI6MTc3MDU5Nzg4Nn0.H03iSddAfilu97H5FE4DC9bjvp3KivAhdTTM3ngaaIo
 
-### Transfer amount
+### Transfer amount of money
 POST http://localhost:8080/api/transactions/transfer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MDc0NTAsImV4cCI6MTc3MDU5Mzg1MH0.bC5tMMI925u1VuYvZ7XNsQ_2uX-jaBvl4CCRqIBO5tY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MTIwMzEsImV4cCI6MTc3MDU5ODQzMX0.aUymaoclSsiHFwW1NmEFllGFNuXOlPC04fu4DHf4_Bw
 Content-Type: application/json
 
 {
-  "targetAccountNumber": "ES24-9524-5642-8238-2843-2358",
-  "amount": 100.50
+  "sourceAccountNumber": "ES24-4215-2426-7544-5775-8395",
+  "targetAccountNumber": "ES24-9184-7443-9134-5687-5280",
+  "amount": 100.00
+}
+
+### Deposit Money
+POST http://localhost:8080/api/accounts/deposit
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA1MTA4NDQsImV4cCI6MTc3MDU5NzI0NH0.suytmUNmf8e2xdzRrk-QeJOMt1i88zZ5KurUDiK-eYA
+Content-Type: application/json
+
+{
+  "accountNumber": "ES24-4215-2426-7544-5775-8395",
+  "amount": 5000.00
 }

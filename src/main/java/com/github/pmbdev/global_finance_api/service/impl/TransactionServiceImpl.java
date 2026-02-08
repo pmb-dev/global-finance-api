@@ -22,17 +22,24 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional // Atomic function
-    public TransactionEntity transfer(String targetAccountNumber, BigDecimal amount) {
+    public TransactionEntity transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount) {
+
+        // Check that the amount is positive and > 0
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("The amount must be higher than zero.");
+        }
 
         // Get the email from the token as always
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // Search for the sender's account
-        // (We are taking the first account the sender has)
-        AccountEntity sourceAccount = accountRepository.findAll().stream()
-                .filter(acc -> acc.getUser().getEmail().equals(email))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("You do not have any account."));
+        // Search the source Account of the sender
+        AccountEntity sourceAccount = accountRepository.findByAccountNumber(sourceAccountNumber)
+                .orElseThrow(() -> new RuntimeException("Source account not found."));
+
+        // Check if the account is from the loged user
+        if (!sourceAccount.getUser().getEmail().equals(email)) {
+            throw new RuntimeException("Account not owned by sender.");
+        }
 
         // Search the receiver's account by the IBAN
         AccountEntity targetAccount = accountRepository.findByAccountNumber(targetAccountNumber)

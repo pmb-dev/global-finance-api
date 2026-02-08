@@ -3,6 +3,7 @@ package com.github.pmbdev.global_finance_api.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity // To make the code to database
 @Table(name = "users") // Name of the table in the database
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserEntity {
 
     @Id // Primary Key

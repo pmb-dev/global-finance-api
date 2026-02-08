@@ -3,6 +3,7 @@ package com.github.pmbdev.global_finance_api.repository.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity // To make the code to database
 @Table(name = "accounts") // Name of the table in the database
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AccountEntity {
 
     @Id
