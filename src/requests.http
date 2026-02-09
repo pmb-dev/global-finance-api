@@ -41,13 +41,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZ
 
 ### Transfer amount of money
 POST http://localhost:8080/api/transactions/transfer
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA2NzI2NDksImV4cCI6MTc3MDc1OTA0OX0.h8a0gD2bmUcPrJkmBvIe83WrI0_9U2Rll7OcupqGVXA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXJAZmluYW5jZS5jb20iLCJpYXQiOjE3NzA2NzMwNzYsImV4cCI6MTc3MDc1OTQ3Nn0.dYmscpNB2Kq5JRI5VUvb7a4FqTjciOqUXOGAijXs2TQ
 Content-Type: application/json
 
 {
   "sourceAccountNumber": "ES24-4215-2426-7544-5775-8395",
   "targetAccountNumber": "ES24-9524-5642-8238-2843-2358",
-  "amount": 150.00
+  "amount": 15000.00
 }
 
 ### Deposit Money
