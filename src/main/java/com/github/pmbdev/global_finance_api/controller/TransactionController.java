@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
@@ -22,5 +24,10 @@ public class TransactionController {
                 request.getAmount()
         );
         return ResponseEntity.ok(transaction);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TransactionEntity>> getHistory(){
+        return ResponseEntity.ok(transactionService.getMyTransactionHistory());
     }
 }

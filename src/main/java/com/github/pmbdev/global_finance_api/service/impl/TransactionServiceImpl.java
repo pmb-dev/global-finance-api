@@ -5,6 +5,8 @@ import com.github.pmbdev.global_finance_api.repository.TransactionRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
+import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
+import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional // Atomic function
@@ -67,5 +71,16 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
 
         return transactionRepository.save(transaction);
+    }
+
+    @Override
+    public List<TransactionEntity> getMyTransactionHistory() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        UserEntity currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+
+        return transactionRepository.findAllByUserId(currentUser.getId());
     }
 }

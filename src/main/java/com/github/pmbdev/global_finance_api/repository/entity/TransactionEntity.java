@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity // To make the code to database
 @Table(name = "transactions") // Name of the table in the database
@@ -21,6 +22,7 @@ public class TransactionEntity {
     private BigDecimal amount;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY)
