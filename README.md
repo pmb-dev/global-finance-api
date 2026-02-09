@@ -35,8 +35,13 @@ This API handles multi-currency accounts, atomic transactions, and audit logs.
 ## Project Structure
 
 ```text
-src/main/java/com/github/[user]/globalfinance
-├── controller/   # REST Endpoints
-├── service/      # Business Logic
-├── repository/   # Data Access (JPA)
-└── entity/       # Database Models
+src/main/java/com/github/pmbdev/global_finance_api
+├── config/           # App configuration (Beans, PasswordEncoder)
+├── controller/       # REST Endpoints (The entry point)
+│   └── dto/          # Data Transfer Objects (Requests/Responses)
+├── exception/        # Global Error Handling logic
+├── repository/       # Data Access Layer (JPA Interfaces)
+│   └── entity/       # Database Tables (The core data models)
+├── security/         # JWT Filters & Security Config
+└── service/          # Business Logic Interfaces
+    └── impl/         # Business Logic Implementation (The brain)
