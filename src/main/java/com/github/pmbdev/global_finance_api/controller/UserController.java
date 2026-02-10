@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController // To recieve web gets
 @RequestMapping("/api/users") // Direction
@@ -16,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register") // To POST queries
-    public ResponseEntity<UserEntity> register(@RequestBody UserEntity user){
+    public ResponseEntity<UserEntity> register(@Valid @RequestBody UserEntity user){
         UserEntity savedUser = userService.createUser(user);
 
         //201 code (CREATED) to reply

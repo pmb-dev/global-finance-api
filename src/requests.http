@@ -1,15 +1,15 @@
+//pabloEncoder@finance.com - hi1234
+//markgarcia@finance.com - hi1234
+
 ### Create a new user
 POST http://localhost:8080/api/users/register
 Content-Type: application/json
 
 {
-  "name": "Mark Garcia",
-  "email": "markgarcia@finance.com",
-  "password": "hi1234"
+  "name": "",
+  "email": "markgarcia-finance.com",
+  "password": "hi12"
 }
-
-//pabloEncoder@finance.com - hi1234
-//markgarcia@finance.com - hi1234
 
 ### Login to get the token
 POST http://localhost:8080/api/users/login
