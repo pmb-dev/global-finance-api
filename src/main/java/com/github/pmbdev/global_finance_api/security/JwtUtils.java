@@ -8,7 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -25,10 +25,10 @@ public class JwtUtils {
     // Generate Token
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username) // The token's owner
-                .setIssuedAt(new Date(System.currentTimeMillis())) // Creation time
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration)) // Expiration time
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // Digital signature,
+                .subject(username) // The token's owner
+                .issuedAt(new Date(System.currentTimeMillis())) // Creation time
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration)) // Expiration time
+                .signWith(getSignInKey()) // Digital signature,
                 // if someone tries to modify the expiration time or the username without the key, the signature breaks
                 .compact();
     }
@@ -50,10 +50,11 @@ public class JwtUtils {
     public Date extractExpiration(String token){
         return extractClaim(token, Claims::getExpiration);
     }
+
     // --- Other methods ---
 
     // Transforms the text from the YAML file into a cryptographic key
-    private Key getSignInKey() {
+    private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -66,11 +67,11 @@ public class JwtUtils {
 
     // Extracts all the info from the token
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
+        return Jwts.parser()
+                .verifyWith(getSignInKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
 }
