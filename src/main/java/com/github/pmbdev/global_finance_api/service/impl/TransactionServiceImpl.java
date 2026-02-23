@@ -56,9 +56,17 @@ public class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Insufficient funds.");
         }
 
-        // Mathematic operation
+        BigDecimal finalAmount = amount;
+
+        // Different currencies logic
+        if (!sourceAccount.getCurrency().equals(targetAccount.getCurrency())) {
+            BigDecimal exchangeRate = getExchangeRate(sourceAccount.getCurrency(), targetAccount.getCurrency());
+            finalAmount = amount.multiply(exchangeRate);
+        }
+
+        // Mathematical operation
         sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
-        targetAccount.setBalance(targetAccount.getBalance().add(amount));
+        targetAccount.setBalance(targetAccount.getBalance().add(finalAmount));
 
         // Save updated amounts
         accountRepository.save(sourceAccount);
@@ -83,5 +91,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.findAllByUserIdWithFilters(
                 currentUser.getId(), startDate, endDate, pageable);
+    }
+
+    private BigDecimal getExchangeRate(String from, String to) {
+        if (from.equals("EUR") && to.equals("USD")) return new BigDecimal("1.08");
+        if (from.equals("USD") && to.equals("EUR")) return new BigDecimal("0.92");
+        return BigDecimal.ONE;
     }
 }

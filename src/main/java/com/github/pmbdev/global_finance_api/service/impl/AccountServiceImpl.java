@@ -4,6 +4,7 @@ import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
+import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
 import com.github.pmbdev.global_finance_api.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
     private final UserRepository userRepository;
 
     @Override
-    public AccountEntity createAccount() {
+    public AccountEntity createAccount(Currency currency) {
         // We get the authenticated user and get the name
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -33,6 +34,7 @@ public class AccountServiceImpl implements AccountService {
         AccountEntity newAccount = AccountEntity.builder()
                 .accountNumber(generateIban()) // Random number
                 .balance(BigDecimal.ZERO) // Initial balance = 0
+                .currency(currency)
                 .user(currentUser) // Assign the user
                 .build();
 

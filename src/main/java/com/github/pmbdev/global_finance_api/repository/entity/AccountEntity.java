@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity // To make the code to database
 @Table(name = "accounts") // Name of the table in the database
@@ -20,6 +23,10 @@ public class AccountEntity {
 
     @Column(name = "account_number", unique = true, nullable = false)
     private String accountNumber;
+
+    @Enumerated(EnumType.STRING) // enum as string in DB
+    @Column(nullable = false)
+    private Currency currency;
 
     @Column(nullable = false)
     private BigDecimal balance;

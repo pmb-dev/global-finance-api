@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.controller;
 
+import com.github.pmbdev.global_finance_api.controller.dto.AccountRequest;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.service.AccountService;
 import lombok.Data;
@@ -18,8 +19,8 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<AccountEntity> createAccount() { // We don't need to request because we already know the user
-        AccountEntity newAccount = accountService.createAccount();
+    public ResponseEntity<AccountEntity> createAccount(@RequestBody AccountRequest request) { // We don't need to request because we already know the user
+        AccountEntity newAccount = accountService.createAccount(request.getCurrency());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newAccount);
     }
