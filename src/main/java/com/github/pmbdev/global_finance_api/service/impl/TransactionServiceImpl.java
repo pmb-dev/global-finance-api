@@ -4,6 +4,7 @@ import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.TransactionRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
+import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
@@ -93,9 +94,9 @@ public class TransactionServiceImpl implements TransactionService {
                 currentUser.getId(), startDate, endDate, pageable);
     }
 
-    private BigDecimal getExchangeRate(String from, String to) {
-        if (from.equals("EUR") && to.equals("USD")) return new BigDecimal("1.08");
-        if (from.equals("USD") && to.equals("EUR")) return new BigDecimal("0.92");
+    private BigDecimal getExchangeRate(Currency from, Currency to) {
+        if (from == Currency.EUR && to == Currency.USD) return new BigDecimal("1.18");
+        if (from == Currency.USD && to == Currency.EUR) return new BigDecimal("0.85");
         return BigDecimal.ONE;
     }
 }
