@@ -40,8 +40,10 @@ src/main/java/com/github/pmbdev/global_finance_api
 ├── controller/       # REST Endpoints (The entry point)
 │   └── dto/          # Data Transfer Objects (Requests/Responses)
 ├── exception/        # Global Error Handling logic
+│   └── custom/       # Custom Error Handling logic
 ├── repository/       # Data Access Layer (JPA Interfaces)
 │   └── entity/       # Database Tables (The core data models)
+│       └── enums/    # Enumerate Tables
 ├── security/         # JWT Filters & Security Config
 └── service/          # Business Logic Interfaces
     └── impl/         # Business Logic Implementation (The brain)
