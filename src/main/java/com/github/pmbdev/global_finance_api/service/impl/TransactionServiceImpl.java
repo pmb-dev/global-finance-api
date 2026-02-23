@@ -8,6 +8,8 @@ import com.github.pmbdev.global_finance_api.service.TransactionService;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,13 +76,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionEntity> getMyTransactionHistory() {
-
+    public Page<TransactionEntity> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
         UserEntity currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found."));
 
-        return transactionRepository.findAllByUserId(currentUser.getId());
+        return transactionRepository.findAllByUserIdWithFilters(
+                currentUser.getId(), startDate, endDate, pageable);
     }
 }
