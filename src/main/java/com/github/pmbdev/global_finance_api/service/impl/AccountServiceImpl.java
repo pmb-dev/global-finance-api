@@ -1,5 +1,7 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
+import com.github.pmbdev.global_finance_api.exception.custom.AccountNotFoundException;
+import com.github.pmbdev.global_finance_api.exception.custom.UserNotFoundException;
 import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
@@ -28,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
 
         // We search for the user in the database
         UserEntity currentUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         // Create the new account
         AccountEntity newAccount = AccountEntity.builder()
@@ -48,7 +50,7 @@ public class AccountServiceImpl implements AccountService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         UserEntity currentUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         return accountRepository.findByUser(currentUser);
     }
@@ -69,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deposit(String accountNumber, BigDecimal amount) {
         AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new RuntimeException("Account not found."));
+                .orElseThrow(() -> new AccountNotFoundException("Account " + accountNumber + " not found."));
 
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);

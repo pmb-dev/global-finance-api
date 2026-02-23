@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
+import com.github.pmbdev.global_finance_api.exception.custom.*;
 import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.TransactionRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
@@ -31,9 +32,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional // Atomic function
     public TransactionEntity transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount) {
 
+        // Check that the source account and the target account are not the same
+        if(sourceAccountNumber.equals(targetAccountNumber)){
+            throw new SameAccountTransferException("The target account must be different than the source account.");
+        }
+
         // Check that the amount is positive and > 0
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("The amount must be higher than zero.");
+            throw new InvalidAmountException("The amount must be higher than zero.");
         }
 
         // Get the email from the token as always
@@ -41,20 +47,20 @@ public class TransactionServiceImpl implements TransactionService {
 
         // Search the source Account of the sender
         AccountEntity sourceAccount = accountRepository.findByAccountNumber(sourceAccountNumber)
-                .orElseThrow(() -> new RuntimeException("Source account not found."));
+                .orElseThrow(() -> new AccountNotFoundException("Source account " + sourceAccountNumber + " not found."));
 
-        // Check if the account is from the loged user
+        // Check if the account is from the logged user
         if (!sourceAccount.getUser().getEmail().equals(email)) {
-            throw new RuntimeException("Account not owned by sender.");
+            throw new UnauthorizedAccountAccessException("Account " + sourceAccountNumber + " not owned by sender.");
         }
 
         // Search the receiver's account by the IBAN
         AccountEntity targetAccount = accountRepository.findByAccountNumber(targetAccountNumber)
-                .orElseThrow(() -> new RuntimeException("Destination account not found."));
+                .orElseThrow(() -> new AccountNotFoundException("Destination account " + targetAccountNumber + " not found."));
 
         // Check if there´s enough money
         if (sourceAccount.getBalance().compareTo(amount) < 0) {
-            throw new RuntimeException("Insufficient funds.");
+            throw new InsufficientFundsException("Insufficient funds in account: " + sourceAccountNumber);
         }
 
         BigDecimal finalAmount = amount;
@@ -88,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
     public Page<TransactionEntity> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity currentUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         return transactionRepository.findAllByUserIdWithFilters(
                 currentUser.getId(), startDate, endDate, pageable);
