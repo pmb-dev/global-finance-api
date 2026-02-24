@@ -6,6 +6,7 @@ import com.github.pmbdev.global_finance_api.repository.TransactionRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
+import com.github.pmbdev.global_finance_api.repository.entity.enums.TransactionCategory;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
@@ -30,7 +31,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional // Atomic function
-    public TransactionEntity transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount) {
+    public TransactionEntity transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount, String concept, TransactionCategory category) {
 
         // Check that the source account and the target account are not the same
         if(sourceAccountNumber.equals(targetAccountNumber)){
@@ -40,6 +41,14 @@ public class TransactionServiceImpl implements TransactionService {
         // Check that the amount is positive and > 0
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidAmountException("The amount must be higher than zero.");
+        }
+
+        // Concept is optional
+        String finalConcept = (concept == null || concept.isBlank()) ? "No concept" : concept;
+
+        // Check that the category isn't null
+        if (category == null) {
+            throw new InvalidTransactionDataException("Transaction category is required.");
         }
 
         // Get the email from the token as always
@@ -85,6 +94,8 @@ public class TransactionServiceImpl implements TransactionService {
                 .timestamp(LocalDateTime.now())
                 .sender(sourceAccount)
                 .receiver(targetAccount)
+                .concept(concept)
+                .category(category)
                 .build();
 
         return transactionRepository.save(transaction);

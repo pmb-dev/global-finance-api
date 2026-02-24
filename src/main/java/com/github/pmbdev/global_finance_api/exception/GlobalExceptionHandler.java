@@ -100,4 +100,12 @@ public class GlobalExceptionHandler {
         error.put("status", "400 BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(InvalidTransactionDataException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidTransactionData(InvalidTransactionDataException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        error.put("status", "400 BAD REQUEST");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

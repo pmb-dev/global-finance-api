@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.repository.entity;
 
+import com.github.pmbdev.global_finance_api.repository.entity.enums.TransactionCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -33,6 +34,11 @@ public class TransactionEntity {
     @JoinColumn(name = "receiver_account_id", nullable = false)
     private AccountEntity receiver;
 
+    @Column
+    private String concept;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransactionCategory category;
 
 }

@@ -25,7 +25,9 @@ public class TransactionController {
         TransactionEntity transaction = transactionService.transfer(
                 request.getSourceAccountNumber(),
                 request.getTargetAccountNumber(),
-                request.getAmount()
+                request.getAmount(),
+                request.getConcept(),
+                request.getCategory()
         );
         return ResponseEntity.ok(transaction);
     }
