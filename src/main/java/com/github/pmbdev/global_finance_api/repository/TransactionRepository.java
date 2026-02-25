@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.repository;
 
+import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,11 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable);
+
+    @Query("SELECT t.category as category, " +
+            "SUM(t.amount) as totalAmount " +
+            "FROM TransactionEntity t " +
+            "WHERE t.sender.user.id = :userId " +
+            "GROUP BY t.category")
+    List<CategoryStatResponse> findSpendingByCategory(@Param("userId") Long userId);
 }

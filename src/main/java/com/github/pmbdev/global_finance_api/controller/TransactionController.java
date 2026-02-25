@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.controller;
 
+import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
 import com.github.pmbdev.global_finance_api.controller.dto.TransferRequest;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
@@ -41,5 +42,10 @@ public class TransactionController {
     ) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
         return ResponseEntity.ok(transactionService.getMyTransactionHistory(startDate, endDate, pageable));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<List<CategoryStatResponse>> getStats() {
+        return ResponseEntity.ok(transactionService.getSpendingStats());
     }
 }

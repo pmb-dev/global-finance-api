@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.service;
 
+import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,4 +18,5 @@ public interface TransactionService {
             String concept,
             TransactionCategory category);
     Page<TransactionEntity> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+    List<CategoryStatResponse> getSpendingStats();
 }

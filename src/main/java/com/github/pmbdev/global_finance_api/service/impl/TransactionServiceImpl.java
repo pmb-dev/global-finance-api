@@ -1,11 +1,11 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
+import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
 import com.github.pmbdev.global_finance_api.exception.custom.*;
 import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.TransactionRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
-import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
 import com.github.pmbdev.global_finance_api.repository.entity.enums.TransactionCategory;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
@@ -113,5 +113,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.findAllByUserIdWithFilters(
                 currentUser.getId(), startDate, endDate, pageable);
+    }
+
+    @Override
+    public List<CategoryStatResponse> getSpendingStats() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+        return transactionRepository.findSpendingByCategory(currentUser.getId());
     }
 }
