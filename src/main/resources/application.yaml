@@ -31,3 +31,8 @@ springdoc:
   redoc:
     enabled: true
     path: /redoc.html
+
+api:
+  exchangerate:
+    url: https://v6.exchangerate-api.com/v6/
+    key: 1313f6abc379b7f5006b9272

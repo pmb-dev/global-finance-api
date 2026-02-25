@@ -28,6 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final ExchangeRateServiceImpl exchangeRateService;
 
     @Override
     @Transactional // Atomic function
@@ -43,13 +44,13 @@ public class TransactionServiceImpl implements TransactionService {
             throw new InvalidAmountException("The amount must be higher than zero.");
         }
 
-        // Concept is optional
-        String finalConcept = (concept == null || concept.isBlank()) ? "No concept" : concept;
-
         // Check that the category isn't null
         if (category == null) {
             throw new InvalidTransactionDataException("Transaction category is required.");
         }
+
+        // Concept is optional
+        String finalConcept = (concept == null || concept.isBlank()) ? "No concept" : concept;
 
         // Get the email from the token as always
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -75,9 +76,12 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal finalAmount = amount;
 
         // Different currencies logic
-        if (!sourceAccount.getCurrency().equals(targetAccount.getCurrency())) {
-            BigDecimal exchangeRate = getExchangeRate(sourceAccount.getCurrency(), targetAccount.getCurrency());
-            finalAmount = amount.multiply(exchangeRate);
+        if (sourceAccount.getCurrency() != targetAccount.getCurrency()) {
+            BigDecimal rate = exchangeRateService.getRate(
+                    sourceAccount.getCurrency().name(),
+                    targetAccount.getCurrency().name()
+            );
+            finalAmount = amount.multiply(rate);
         }
 
         // Mathematical operation
@@ -94,7 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .timestamp(LocalDateTime.now())
                 .sender(sourceAccount)
                 .receiver(targetAccount)
-                .concept(concept)
+                .concept(finalConcept)
                 .category(category)
                 .build();
 
@@ -109,11 +113,5 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.findAllByUserIdWithFilters(
                 currentUser.getId(), startDate, endDate, pageable);
-    }
-
-    private BigDecimal getExchangeRate(Currency from, Currency to) {
-        if (from == Currency.EUR && to == Currency.USD) return new BigDecimal("1.18");
-        if (from == Currency.USD && to == Currency.EUR) return new BigDecimal("0.85");
-        return BigDecimal.ONE;
     }
 }
