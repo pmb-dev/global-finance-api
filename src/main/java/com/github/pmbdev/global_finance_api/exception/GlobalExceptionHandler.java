@@ -12,17 +12,6 @@ import java.util.Map;
 @ControllerAdvice // Listen to all controllers
 public class GlobalExceptionHandler {
 
-    // Captures the generic exceptions
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
-
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage()); // Message of the throw new RuntimeException(...)
-        errorResponse.put("status", "400 BAD REQUEST"); // Client's fault (wrong data)
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
-
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(
             org.springframework.web.bind.MethodArgumentNotValidException ex) {
@@ -107,5 +96,16 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         error.put("status", "400 BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    // Captures the generic exceptions
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException ex) {
+
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage()); // Message of the throw new RuntimeException(...)
+        errorResponse.put("status", "400 BAD REQUEST"); // Client's fault (wrong data)
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
