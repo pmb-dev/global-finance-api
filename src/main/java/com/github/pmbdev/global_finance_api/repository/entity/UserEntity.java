@@ -22,13 +22,13 @@ public class UserEntity {
     @NotBlank(message = "The name can't be null.")
     private String name;
 
-    @Email(message = "You must introduce a valid email.")
-    @NotBlank(message = "The email can't be blank.")
+    @Email(message = "You must introduce a valid email format.")
+    @NotBlank(message = "The email cannot be empty.")
     @Column(unique = true, nullable = false) //email with restriction & not null
     private String email;
 
-    @NotBlank(message = "The password can't be null.")
-    @Size(min = 6, message = "The password must have at least six characters.")
+    @NotBlank(message = "The password cannot be empty.")
+    @Size(min = 8, message = "The password must be at least 8 characters long.")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //So the password won't be sent to the JSON and to the front end
     private String password;
 }

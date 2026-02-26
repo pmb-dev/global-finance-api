@@ -4,6 +4,7 @@ import com.github.pmbdev.global_finance_api.controller.dto.AccountRequest;
 import com.github.pmbdev.global_finance_api.controller.dto.AccountResponse;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class AccountController {
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<Void> deposit(@RequestBody DepositRequest request) {
+    public ResponseEntity<Void> deposit(@Valid @RequestBody DepositRequest request) {
         accountService.deposit(request.getAccountNumber(), request.getAmount());
         return ResponseEntity.ok().build();
     }

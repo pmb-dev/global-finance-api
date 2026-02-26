@@ -5,6 +5,7 @@ import com.github.pmbdev.global_finance_api.controller.dto.TransactionResponse;
 import com.github.pmbdev.global_finance_api.controller.dto.TransferRequest;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/transfer")
-    public ResponseEntity<TransactionResponse> transfer(@RequestBody TransferRequest request) {
+    public ResponseEntity<TransactionResponse> transfer(@Valid @RequestBody TransferRequest request) {
         TransactionResponse transaction = transactionService.transfer(
                 request.getSourceAccountNumber(),
                 request.getTargetAccountNumber(),
