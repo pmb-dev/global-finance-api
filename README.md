@@ -3,13 +3,31 @@
 High-performance backend engine for a financial platform, built with **Java 21** and **Spring Boot 3**.
 This API handles multi-currency accounts, atomic transactions, and audit logs.
 
+## 🚀 Key Features
+
+* **Secure Authentication:** Robust user registration and login system powered by **JWT (JSON Web Tokens)** and Spring Security.
+* **Multi-Currency Management:** Create accounts in different currencies (EUR, USD, etc.) with automated balance tracking.
+* **Smart Transfers:** Atomic money transfers between accounts with **Real-Time Exchange Rates** integrated via external Financial APIs.
+* **Financial Analytics:** Advanced spending statistics grouped by categories (Food, Rent, Leisure, etc.) using **JPQL Projections**.
+* **Transaction History:** Paginated and filterable transaction logs with custom date ranges.
+* **Data Integrity:** Strict validation layers (DTOs) and a centralized **Global Exception Handler** for clean API responses.
+
 ## Tech Stack
 
-* **Core:** Java 21, Spring Boot 3.2
-* **Database:** PostgreSQL 15 (Dockerized)
-* **Security:** Spring Security & JWT
-* **DevOps:** Docker Compose
-* **Architecture:** Hexagonal-inspired (Controller -> Service -> Repository)
+* **Core:** Java 21, Spring Boot 3.2+
+* **Database:** PostgreSQL (Dockerized)
+* **Security:** Spring Security, JWT
+* **API Documentation:** **SpringDoc OpenAPI (Swagger UI)**
+* **External Integrations:** **ExchangeRate-API** for real-time currency conversion
+* **Tools:** Lombok, Maven, Docker Compose
+
+## API Documentation
+
+Once the application is running, you can explore and test the API endpoints through the **Swagger UI** interactive interface:
+
+🔗 **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)**
+
+The documentation includes detailed request/response schemas, security requirements, and example values for every endpoint.
 
 ## Setup & Installation
 
@@ -32,6 +50,13 @@ This API handles multi-currency accounts, atomic transactions, and audit logs.
     ```
 4.  Access the API at 'http://localhost:8080'
 
+5.  To enable real-time currency conversion, add your **ExchangeRate-API** key to the `src/main/resources/application.yml` file:
+    ```yaml
+    api:
+      exchangerate:
+        url: [https://v6.exchangerate-api.com/v6/](https://v6.exchangerate-api.com/v6/)
+        key: ${EXCHANGE_RATE_KEY:your_api_key_here}
+    ```
 ## Project Structure
 
 ```text
