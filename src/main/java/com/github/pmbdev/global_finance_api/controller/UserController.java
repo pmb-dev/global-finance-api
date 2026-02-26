@@ -1,5 +1,7 @@
 package com.github.pmbdev.global_finance_api.controller;
 
+import com.github.pmbdev.global_finance_api.controller.dto.AuthResponse;
+import com.github.pmbdev.global_finance_api.controller.dto.UserResponse;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.service.UserService;
 import com.github.pmbdev.global_finance_api.controller.dto.LoginRequest;
@@ -17,17 +19,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register") // To POST queries
-    public ResponseEntity<UserEntity> register(@Valid @RequestBody UserEntity user){
-        UserEntity savedUser = userService.createUser(user);
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserEntity user){
+        UserResponse savedUser = userService.createUser(user);
 
         //201 code (CREATED) to reply
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PostMapping("/login") // To login request
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
 
-        String token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        AuthResponse token = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
         return ResponseEntity.ok(token);
     }

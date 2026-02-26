@@ -1,6 +1,7 @@
 package com.github.pmbdev.global_finance_api.service;
 
 import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
+import com.github.pmbdev.global_finance_api.controller.dto.TransactionResponse;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,12 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TransactionService {
-    TransactionEntity transfer(
+    TransactionResponse transfer(
             String sourceAccountNumber,
             String targetAccountNumber,
             BigDecimal amount,
             String concept,
             TransactionCategory category);
-    Page<TransactionEntity> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+    Page<TransactionResponse> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
     List<CategoryStatResponse> getSpendingStats();
 }

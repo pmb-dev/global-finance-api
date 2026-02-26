@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
+import com.github.pmbdev.global_finance_api.controller.dto.AccountResponse;
 import com.github.pmbdev.global_finance_api.exception.custom.AccountNotFoundException;
 import com.github.pmbdev.global_finance_api.exception.custom.UserNotFoundException;
 import com.github.pmbdev.global_finance_api.repository.AccountRepository;
@@ -24,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
     private final UserRepository userRepository;
 
     @Override
-    public AccountEntity createAccount(Currency currency) {
+    public AccountResponse createAccount(Currency currency) {
         // We get the authenticated user and get the name
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -41,18 +42,35 @@ public class AccountServiceImpl implements AccountService {
                 .build();
 
         // Save in DB
-        return accountRepository.save(newAccount);
+        AccountEntity savedAccount = accountRepository.save(newAccount);
+
+        // Convert the account in a Response for security
+        return AccountResponse.builder()
+                .id(savedAccount.getId())
+                .accountNumber(savedAccount.getAccountNumber())
+                .balance(savedAccount.getBalance())
+                .currency(savedAccount.getCurrency())
+                .build();
     }
 
     @Override
-    public List<AccountEntity> getMyAccounts() {
+    public List<AccountResponse> getMyAccounts() {
         // Get user by token
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         UserEntity currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
 
-        return accountRepository.findByUser(currentUser);
+        List<AccountEntity> entities = accountRepository.findByUser(currentUser);
+
+        return entities.stream()
+                .map(acc -> AccountResponse.builder()
+                        .id(acc.getId())
+                        .accountNumber(acc.getAccountNumber())
+                        .balance(acc.getBalance())
+                        .currency(acc.getCurrency())
+                        .build())
+                .toList();
     }
 
     // Creating the IBAN

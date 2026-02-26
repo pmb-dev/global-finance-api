@@ -1,5 +1,8 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
+import com.github.pmbdev.global_finance_api.controller.dto.AuthResponse;
+import com.github.pmbdev.global_finance_api.controller.dto.RegisterRequest;
+import com.github.pmbdev.global_finance_api.controller.dto.UserResponse;
 import com.github.pmbdev.global_finance_api.exception.custom.EmailAlreadyExistsException;
 import com.github.pmbdev.global_finance_api.exception.custom.InvalidCredentialsException;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
@@ -19,16 +22,26 @@ public class UserServiceImpl implements UserService{
     private final JwtUtils jwtUtils;
 
     @Override
-    public UserEntity createUser(UserEntity user){
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException("Email " + user.getEmail() + " already exists.");
+    public UserResponse createUser(RegisterRequest request){
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException("Email " + request.getEmail() + " already exists.");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword())); //To encode the password before saving it
-        return userRepository.save(user);
+
+        UserEntity user = UserEntity.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
+
+        UserEntity savedUser = userRepository.save(user);
+
+        return UserResponse.builder()
+                .id(savedUser.getId())
+                .email(savedUser.getEmail())
+                .build();
     }
 
     @Override
-    public String login(String email, String password) {
+    public AuthResponse login(String email, String password) {
         // Search user with email
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password."));
@@ -39,6 +52,10 @@ public class UserServiceImpl implements UserService{
         }
 
         // Generate Token
-        return jwtUtils.generateToken(email);
+        String token = jwtUtils.generateToken(email);
+
+        return AuthResponse.builder()
+                .token(token)
+                .build();
     }
 }

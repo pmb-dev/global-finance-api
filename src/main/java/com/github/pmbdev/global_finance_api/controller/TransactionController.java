@@ -1,6 +1,7 @@
 package com.github.pmbdev.global_finance_api.controller;
 
 import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
+import com.github.pmbdev.global_finance_api.controller.dto.TransactionResponse;
 import com.github.pmbdev.global_finance_api.controller.dto.TransferRequest;
 import com.github.pmbdev.global_finance_api.repository.entity.TransactionEntity;
 import com.github.pmbdev.global_finance_api.service.TransactionService;
@@ -22,8 +23,8 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/transfer")
-    public ResponseEntity<TransactionEntity> transfer(@RequestBody TransferRequest request) {
-        TransactionEntity transaction = transactionService.transfer(
+    public ResponseEntity<TransactionResponse> transfer(@RequestBody TransferRequest request) {
+        TransactionResponse transaction = transactionService.transfer(
                 request.getSourceAccountNumber(),
                 request.getTargetAccountNumber(),
                 request.getAmount(),
@@ -34,7 +35,7 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TransactionEntity>> getHistory(
+    public ResponseEntity<Page<TransactionResponse>> getHistory(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME) java.time.LocalDateTime startDate,

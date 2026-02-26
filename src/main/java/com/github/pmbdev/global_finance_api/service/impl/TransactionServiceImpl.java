@@ -1,6 +1,7 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
 import com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse;
+import com.github.pmbdev.global_finance_api.controller.dto.TransactionResponse;
 import com.github.pmbdev.global_finance_api.exception.custom.*;
 import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.TransactionRepository;
@@ -32,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional // Atomic function
-    public TransactionEntity transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount, String concept, TransactionCategory category) {
+    public TransactionResponse transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount, String concept, TransactionCategory category) {
 
         // Check that the source account and the target account are not the same
         if(sourceAccountNumber.equals(targetAccountNumber)){
@@ -93,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
         accountRepository.save(targetAccount);
 
         // Transaction bank receipt
-        TransactionEntity transaction = TransactionEntity.builder()
+        TransactionEntity newTransaction = TransactionEntity.builder()
                 .amount(amount)
                 .timestamp(LocalDateTime.now())
                 .sender(sourceAccount)
@@ -102,17 +103,37 @@ public class TransactionServiceImpl implements TransactionService {
                 .category(category)
                 .build();
 
-        return transactionRepository.save(transaction);
+        TransactionEntity savedTransaction = transactionRepository.save(newTransaction);
+
+        return TransactionResponse.builder()
+                .id(savedTransaction.getId())
+                .amount(savedTransaction.getAmount())
+                .timestamp(savedTransaction.getTimestamp())
+                .concept(savedTransaction.getConcept())
+                .category(savedTransaction.getCategory())
+                .sourceAccountNumber(savedTransaction.getSender().getAccountNumber())
+                .targetAccountNumber(savedTransaction.getReceiver().getAccountNumber())
+                .build();
     }
 
     @Override
-    public Page<TransactionEntity> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+    public Page<TransactionResponse> getMyTransactionHistory(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
 
-        return transactionRepository.findAllByUserIdWithFilters(
+        Page<TransactionEntity> transactions = transactionRepository.findAllByUserIdWithFilters(
                 currentUser.getId(), startDate, endDate, pageable);
+
+        return transactions.map(tx -> TransactionResponse.builder()
+                .id(tx.getId())
+                .amount(tx.getAmount())
+                .timestamp(tx.getTimestamp())
+                .concept(tx.getConcept())
+                .category(tx.getCategory())
+                .sourceAccountNumber(tx.getSender().getAccountNumber())
+                .targetAccountNumber(tx.getReceiver().getAccountNumber())
+                .build());
     }
 
     @Override
