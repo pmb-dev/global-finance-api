@@ -20,7 +20,10 @@ public class TransactionEntity {
     private Long id;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private BigDecimal amount; // Source account amount
+
+    @Column(nullable = false)
+    private BigDecimal targetAmount; // Destination account amount
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

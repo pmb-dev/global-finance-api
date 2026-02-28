@@ -6,6 +6,11 @@ import lombok.Data;
 
 @Data   // Lombok creates getters and setters
 public class RegisterRequest {
+
+    @NotBlank(message = "The name is required")
+    @Schema(example = "John Doe", description = "Full name of the user")
+    private String name;
+
     @Schema(example = "user@example.com", description = "Email owned by user to register in the database")
     @NotBlank(message = "Email cannot be empty.")
     @Email(message = "Invalid email format.")

@@ -15,6 +15,8 @@ public class TransactionResponse {
     private Long id;
     @Schema(example = "50.00", description = "Amount to transfer")
     private BigDecimal amount;
+    @Schema(example = "58.80", description = "Amount converted to the destination account currency")
+    private BigDecimal targetAmount;
     @Schema(example = "2026-02-26T19:52:17.487Z", description = "Local date and time of the transaction")
     private LocalDateTime timestamp;
     @Schema(example = "Dinner payment", description = "Optional concept for the transfer")

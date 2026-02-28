@@ -96,6 +96,7 @@ public class TransactionServiceImpl implements TransactionService {
         // Transaction bank receipt
         TransactionEntity newTransaction = TransactionEntity.builder()
                 .amount(amount)
+                .targetAmount(finalAmount)
                 .timestamp(LocalDateTime.now())
                 .sender(sourceAccount)
                 .receiver(targetAccount)
@@ -108,6 +109,7 @@ public class TransactionServiceImpl implements TransactionService {
         return TransactionResponse.builder()
                 .id(savedTransaction.getId())
                 .amount(savedTransaction.getAmount())
+                .targetAmount(savedTransaction.getTargetAmount())
                 .timestamp(savedTransaction.getTimestamp())
                 .concept(savedTransaction.getConcept())
                 .category(savedTransaction.getCategory())
@@ -128,6 +130,7 @@ public class TransactionServiceImpl implements TransactionService {
         return transactions.map(tx -> TransactionResponse.builder()
                 .id(tx.getId())
                 .amount(tx.getAmount())
+                .targetAmount(tx.getTargetAmount())
                 .timestamp(tx.getTimestamp())
                 .concept(tx.getConcept())
                 .category(tx.getCategory())

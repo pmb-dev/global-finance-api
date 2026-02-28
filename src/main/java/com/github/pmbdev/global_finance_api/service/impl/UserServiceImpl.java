@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService{
 
         return UserResponse.builder()
                 .id(savedUser.getId())
+                .name(savedUser.getName())
                 .email(savedUser.getEmail())
                 .build();
     }
