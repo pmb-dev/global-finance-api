@@ -6,11 +6,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component // Calling Spring
 public class JwtUtils {
@@ -23,9 +28,16 @@ public class JwtUtils {
     private long jwtExpiration;
 
     // Generate Token
-    public String generateToken(String username) {
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        String roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+        claims.put("roles", roles);
+
         return Jwts.builder()
-                .subject(username) // The token's owner
+                .claims(claims)
+                .subject(userDetails.getUsername()) // The token's owner
                 .issuedAt(new Date(System.currentTimeMillis())) // Creation time
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration)) // Expiration time
                 .signWith(getSignInKey()) // Digital signature,

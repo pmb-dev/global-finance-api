@@ -7,10 +7,13 @@ import com.github.pmbdev.global_finance_api.exception.custom.EmailAlreadyExistsE
 import com.github.pmbdev.global_finance_api.exception.custom.InvalidCredentialsException;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
+import com.github.pmbdev.global_finance_api.repository.entity.enums.UserRole;
 import com.github.pmbdev.global_finance_api.security.JwtUtils;
 import com.github.pmbdev.global_finance_api.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public UserResponse createUser(RegisterRequest request){
@@ -28,8 +32,10 @@ public class UserServiceImpl implements UserService{
         }
 
         UserEntity user = UserEntity.builder()
+                .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(UserRole.USER)
                 .build();
 
         UserEntity savedUser = userRepository.save(user);
@@ -38,6 +44,7 @@ public class UserServiceImpl implements UserService{
                 .id(savedUser.getId())
                 .name(savedUser.getName())
                 .email(savedUser.getEmail())
+                .role(savedUser.getRole().name())
                 .build();
     }
 
@@ -52,8 +59,10 @@ public class UserServiceImpl implements UserService{
             throw new InvalidCredentialsException("Invalid email or password.");
         }
 
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
         // Generate Token
-        String token = jwtUtils.generateToken(email);
+        String token = jwtUtils.generateToken(userDetails);
 
         return AuthResponse.builder()
                 .token(token)

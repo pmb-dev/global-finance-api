@@ -52,10 +52,14 @@ public class StatementServiceImpl {
         AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        // Check if the user is admin
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
         // Check if the account is from the logged user
-        if (!account.getUser().getEmail().equals(currentUserEmail)) {
+        if (!account.getUser().getEmail().equals(auth.getName()) && !isAdmin) {
             throw new UnauthorizedAccountAccessException("Account " + accountNumber + " not owned by sender.");
         }
 

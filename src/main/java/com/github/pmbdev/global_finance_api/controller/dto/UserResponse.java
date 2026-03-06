@@ -13,4 +13,6 @@ public class UserResponse {
     private String name;
     @Schema(example = "user@example.com", description = "User email address")
     private String email;
+    @Schema(example = "USER", description = "Authorization role of the user")
+    private String role;
 }

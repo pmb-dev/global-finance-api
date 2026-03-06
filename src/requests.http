@@ -2,6 +2,7 @@
 //pabloEncoder@finance.com - hi1234
 //markgarcia@finance.com - hi1234
 //almagarcia@gmail.com - alma1234
+//pabloAdmin@finance.com - admin1234
 
 ### Create a new user
 POST http://localhost:8080/api/users/register

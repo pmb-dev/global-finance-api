@@ -1,5 +1,6 @@
 package com.github.pmbdev.global_finance_api.repository.entity;
 
+import com.github.pmbdev.global_finance_api.repository.entity.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,4 +32,12 @@ public class UserEntity {
     @Size(min = 8, message = "The password must be at least 8 characters long.")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //So the password won't be sent to the JSON and to the front end
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @NotBlank(message = "The role cannot be empty.")
+    @Column(nullable = false)
+    private UserRole role;
+
+    @Builder.Default
+    private boolean enabled = true;
 }

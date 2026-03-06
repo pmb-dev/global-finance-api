@@ -28,13 +28,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register", "/api/users/login").permitAll()
 
                         // OpenAPI/Swagger endpoints
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/swagger-resources/**",
-                                "/webjars/**"
-                        ).permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
+                                "/swagger-ui.html", "/swagger-resources/**",
+                                "/webjars/**").permitAll()
+
+                        // ADMIN area
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // USER area
+                        .requestMatchers("/api/accounts/**").authenticated()
+                        .requestMatchers("/api/transactions/**").authenticated()
 
                         .anyRequest().authenticated()
                 )
