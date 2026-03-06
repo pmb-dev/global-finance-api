@@ -6,12 +6,16 @@ import com.github.pmbdev.global_finance_api.exception.custom.UserNotFoundExcepti
 import com.github.pmbdev.global_finance_api.repository.AccountRepository;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
+import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
 import com.github.pmbdev.global_finance_api.service.AdminService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +24,13 @@ public class AdminServiceImpl implements AdminService {
     private final AccountRepository accountRepository;
 
     @Override
+    @Transactional
     public void blockUser(Long userId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found."));
-        user.setEnabled(false); // Change to block the user
-        userRepository.save(user);
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found with ID: " + userId);
+        }
+
+        userRepository.updateEnabledStatus(userId, false);
     }
 
     @Override
@@ -51,7 +57,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public BigDecimal getTotalBankMoney() {
-        return accountRepository.getTotalBankBalance();
+    public Map<Currency, BigDecimal> getTotalBankMoney() {
+        List<Object[]> results = accountRepository.findTotalBalancesByCurrency();
+        Map<Currency, BigDecimal> totals = new HashMap<>();
+
+        for (Object[] result : results) {
+            totals.put((Currency) result[0], (BigDecimal) result[1]);
+        }
+        return totals;
     }
 }

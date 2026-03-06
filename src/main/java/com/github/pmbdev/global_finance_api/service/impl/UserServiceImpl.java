@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService{
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password."));
 
+        // Check if the user is blocked
+        if (!user.isEnabled()) {
+            throw new InvalidCredentialsException("This account is blocked. Please contact support.");
+        }
+
         // Verify password
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password.");

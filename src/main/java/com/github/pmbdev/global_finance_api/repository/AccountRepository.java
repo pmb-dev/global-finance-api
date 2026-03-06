@@ -16,6 +16,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
     @Query("SELECT a.currency, SUM(a.balance) FROM AccountEntity a GROUP BY a.currency")
     List<Object[]> getTotalBalancesByCurrency();
 
-    @Query("SELECT SUM(a.balance) FROM AccountEntity a")
-    BigDecimal getTotalBankBalance();
+    @Query("SELECT a.currency, SUM(a.balance) FROM AccountEntity a GROUP BY a.currency")
+    List<Object[]> findTotalBalancesByCurrency();
 }
