@@ -3,7 +3,6 @@
 </p>
 
 <h1 align="center">Global Finance API</h1>
-# Global Finance API
 
 High-performance backend engine for a financial platform, built with **Java 21** and **Spring Boot 3**.
 This API handles multi-currency accounts, atomic transactions, and audit logs.
