@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="src/main/resources/static/images/logo.png" alt="Global Finance API Logo" width="200">
+</p>
+
+<h1 align="center">Global Finance API</h1>
 # Global Finance API
 
 High-performance backend engine for a financial platform, built with **Java 21** and **Spring Boot 3**.
