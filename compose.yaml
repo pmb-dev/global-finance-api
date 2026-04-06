@@ -1,16 +1,37 @@
 services:
-  postgres:
-    image: 'postgres:15-alpine'
+  postgres-db:
+    image: postgres:16-alpine
     container_name: global-finance-db
-    ports:
-      - '5433:5432'
     environment:
-      - 'POSTGRES_DB=global_finance_db'
-      - 'POSTGRES_PASSWORD=admin123'
-      - 'POSTGRES_USER=user'
-    volumes:
-      - 'postgres_data_new:/var/lib/postgresql/data'
-    restart: always
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: global_finance_db
+    ports:
+      - "5433:5432"
+    healthcheck: #  Notifies when the DB is ready
+      test: ["CMD-SHELL", "pg_isready -U user -d global_finance_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bank-network
 
-volumes:
-  postgres_data_new:
+  finance-api:
+    build: .
+    container_name: global-finance-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/global_finance_db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=admin123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    networks:
+      - bank-network
+
+networks:
+  bank-network:
+    driver: bridge

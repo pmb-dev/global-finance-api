@@ -1,0 +1,8 @@
+target/
+*.Jar
+.git/
+.github/
+.idea/
+*.iml
+Dockerfile
+.dockerignore
