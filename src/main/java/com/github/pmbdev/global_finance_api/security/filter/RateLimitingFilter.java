@@ -31,9 +31,11 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         // Try to consume the bucket token
         if (bucket.tryConsume(1)) {
             // If there are still tokens, filter the request
+            //System.out.println(">>> Petición permitida. Tokens restantes: " + bucket.getAvailableTokens());
             filterChain.doFilter(request, response);
         } else {
             // If there's no more tokens, return error 429
+            //System.out.println("XXX BLOQUEADO por Rate Limit - IP: " + ip);
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
             response.getWriter().write("Too many requests. Please try again later.");
         }

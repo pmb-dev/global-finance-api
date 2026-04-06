@@ -20,7 +20,7 @@ public class RateLimitingService {
     private Bucket newBucket(String ip) {
         // Limit config: 10 request each minute
         return Bucket.builder()
-                .addLimit(limit -> limit.capacity(50).refillGreedy(50, Duration.ofMinutes(1)))
+                .addLimit(limit -> limit.capacity(15).refillGreedy(15, Duration.ofMinutes(1)))
                 .build();
     }
 }
