@@ -23,8 +23,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable);
 
-    @Query("SELECT t.category as category, " +
-            "SUM(t.amount) as totalAmount " +
+    @Query("SELECT new com.github.pmbdev.global_finance_api.controller.dto.CategoryStatResponse(t.category, SUM(t.amount)) " +
             "FROM TransactionEntity t " +
             "WHERE t.sender.user.id = :userId " +
             "GROUP BY t.category")

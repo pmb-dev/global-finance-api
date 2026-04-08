@@ -82,5 +82,6 @@ src/main/java/com/github/pmbdev/global_finance_api
 │   └── entity/       # Database Tables (The core data models)
 │       └── enums/    # Enumerate Tables
 ├── security/         # JWT Filters & Security Config
+│   └── filter/       # Filters in Security
 └── service/          # Business Logic Interfaces
     └── impl/         # Business Logic Implementation (The brain)

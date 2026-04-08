@@ -53,10 +53,8 @@ class TransactionServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Inicializamos el registro de métricas real (en memoria)
         meterRegistry = new SimpleMeterRegistry();
 
-        // 3. Creamos el servicio MANUALMENTE para asegurar que todo se inyecta bien
         transactionService = new TransactionServiceImpl(
                 transactionRepository,
                 accountRepository,
@@ -65,7 +63,6 @@ class TransactionServiceImplTest {
                 meterRegistry
         );
 
-        // Simular autenticación
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken("test@example.com", null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);

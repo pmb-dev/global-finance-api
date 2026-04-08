@@ -14,6 +14,8 @@ import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,6 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional // Atomic function
+    @CacheEvict(value = "spendingStats", key = "#root.target.getEmailFromContext()")
     public TransactionResponse transfer(String sourceAccountNumber, String targetAccountNumber, BigDecimal amount, String concept, TransactionCategory category) {
 
         // Check that the source account and the target account are not the same
@@ -162,11 +165,18 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Cacheable(value = "spendingStats", key = "#root.target.getEmailFromContext()")
     public List<CategoryStatResponse> getSpendingStats() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        //System.out.println(">>> [CACHE MISS] Calculating statistics from the DB...");
+
+        String email = getEmailFromContext();
         UserEntity currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         return transactionRepository.findSpendingByCategory(currentUser.getId());
+    }
+
+    public String getEmailFromContext() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
