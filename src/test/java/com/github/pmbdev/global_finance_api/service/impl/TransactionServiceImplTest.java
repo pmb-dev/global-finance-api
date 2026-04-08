@@ -1,6 +1,7 @@
 package com.github.pmbdev.global_finance_api.service.impl;
 
 import com.github.pmbdev.global_finance_api.exception.custom.AccountNotFoundException;
+import com.github.pmbdev.global_finance_api.repository.UserRepository;
 import com.github.pmbdev.global_finance_api.repository.entity.AccountEntity;
 import com.github.pmbdev.global_finance_api.controller.dto.TransferRequest;
 import com.github.pmbdev.global_finance_api.exception.custom.InsufficientFundsException;
@@ -11,6 +12,8 @@ import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.repository.entity.enums.Currency;
 import com.github.pmbdev.global_finance_api.repository.entity.enums.TransactionCategory;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,12 +44,28 @@ class TransactionServiceImplTest {
     @Mock
     private ExchangeRateServiceImpl exchangeRateService;
 
-    @InjectMocks // Real service that we want to try out
+    @Mock
+    private UserRepository userRepository;
+
+    private MeterRegistry meterRegistry;
+
     private TransactionServiceImpl transactionService;
 
     @BeforeEach
     void setUp() {
-        // Simulate an authenticated user before the test
+        // Inicializamos el registro de métricas real (en memoria)
+        meterRegistry = new SimpleMeterRegistry();
+
+        // 3. Creamos el servicio MANUALMENTE para asegurar que todo se inyecta bien
+        transactionService = new TransactionServiceImpl(
+                transactionRepository,
+                accountRepository,
+                userRepository,
+                exchangeRateService,
+                meterRegistry
+        );
+
+        // Simular autenticación
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken("test@example.com", null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
