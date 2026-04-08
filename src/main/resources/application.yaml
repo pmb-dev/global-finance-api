@@ -36,3 +36,15 @@ api:
   exchangerate:
     url: https://v6.exchangerate-api.com/v6/
     key: 1313f6abc379b7f5006b9272
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus,metrics"
+  endpoint:
+    health:
+      show-details: always # See if the DB is down from endpoint
+  metrics:
+    tags:
+      application: global-finance-api

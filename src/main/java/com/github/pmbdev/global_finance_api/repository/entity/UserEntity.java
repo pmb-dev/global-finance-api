@@ -34,7 +34,7 @@ public class UserEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "The role cannot be empty.")
+    @NotNull(message = "The role cannot be empty.")
     @Column(nullable = false)
     private UserRole role;
 

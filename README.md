@@ -61,6 +61,14 @@ The documentation includes detailed request/response schemas, security requireme
         url: [https://v6.exchangerate-api.com/v6/](https://v6.exchangerate-api.com/v6/)
         key: ${EXCHANGE_RATE_KEY:your_api_key_here}
     ```
+
+## Monitoring & Documentation
+* **Swagger UI:** http://localhost:8080/swagger-ui.html
+
+* **Prometheus:** http://localhost:9090
+
+* **Grafana:** http://localhost:3000 (User: admin / Pass: admin1234)
+
 ## Project Structure
 
 ```text

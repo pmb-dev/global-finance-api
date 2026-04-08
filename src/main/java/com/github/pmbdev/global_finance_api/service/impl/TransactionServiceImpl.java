@@ -11,6 +11,8 @@ import com.github.pmbdev.global_finance_api.repository.entity.enums.TransactionC
 import com.github.pmbdev.global_finance_api.service.TransactionService;
 import com.github.pmbdev.global_finance_api.repository.entity.UserEntity;
 import com.github.pmbdev.global_finance_api.repository.UserRepository;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +25,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final ExchangeRateServiceImpl exchangeRateService;
+    private final Counter transferCounter;
+
+    public TransactionServiceImpl(
+            TransactionRepository transactionRepository,
+            AccountRepository accountRepository,
+            UserRepository userRepository,
+            ExchangeRateServiceImpl exchangeRateService,
+            MeterRegistry meterRegistry) {
+
+        this.transactionRepository = transactionRepository;
+        this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
+        this.exchangeRateService = exchangeRateService;
+
+        // Counter configuration
+        this.transferCounter = Counter.builder("bank.transactions.transfers")
+                .description("Total number of successful transfers")
+                .register(meterRegistry);
+    }
 
     @Override
     @Transactional // Atomic function
@@ -105,6 +125,8 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
 
         TransactionEntity savedTransaction = transactionRepository.save(newTransaction);
+
+        transferCounter.increment();
 
         return TransactionResponse.builder()
                 .id(savedTransaction.getId())

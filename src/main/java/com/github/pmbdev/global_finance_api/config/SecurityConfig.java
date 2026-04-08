@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
                                 "/swagger-ui.html", "/swagger-resources/**",
                                 "/webjars/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
 
                         // ADMIN area
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

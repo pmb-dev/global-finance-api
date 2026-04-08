@@ -28,6 +28,7 @@ public class AccountController {
             summary = "Create Account",
             description = "Create a new account for the user.")
     @ApiResponse(responseCode = "201", description = "Account created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid parameters")
     @ApiResponse(responseCode = "401", description = "Full authentication is required to access this resource")
     @PostMapping
     public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) { // We don't need to request because we already know the user

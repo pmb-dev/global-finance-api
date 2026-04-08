@@ -1,7 +1,17 @@
-//http://localhost:8080/swagger-ui/index.html#/
-//pabloEncoder@finance.com - hi1234
-//markgarcia@finance.com - hi1234
-//almagarcia@gmail.com - alma1234
+// <--- SWAGGER --->
+// http://localhost:8080/swagger-ui/index.html#/
+
+// <--- PROMETHEUS --->
+// http://localhost:9090
+// bank_transactions_transfers_total
+
+// <--- GRAFANA --->
+// http://localhost:3000
+// user: admin ; password: admin1234
+//
+//pabloEncoder@finance.com - hello1234 - ES24-6956-6208-5871-3284-1413 - ES24-3653-4470-7659-4331-2060
+//markGarcia@finance.com - mark1234 - ES24-8857-9598-9831-9399-1886
+//almaSmith@finance.com - alma1234
 //pabloAdmin@finance.com - admin1234
 
 ### Create a new user
@@ -34,9 +44,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb0VuY29kZXIzQGZpbmFuY
 POST http://localhost:8080/api/accounts
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJrZ2FyY2lhQGZpbmFuY2UuY29tIiwiaWF0IjoxNzcwNTA3MTk2LCJleHAiOjE3NzA1OTM1OTZ9.zO7rnd-N5t_FCRGF2p9EKVbIgYBC4szGRnDZKdEkcoo
 Content-Type: application/json
-
-// pabloEncoder1: ES24-4215-2426-7544-5775-8395 , ES24-9184-7443-9134-5687-5280
-// markgarcia: ES24-9524-5642-8238-2843-2358
 
 ### See my accounts
 GET http://localhost:8080/api/accounts
