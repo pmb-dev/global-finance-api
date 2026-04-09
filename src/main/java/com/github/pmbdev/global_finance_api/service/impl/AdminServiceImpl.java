@@ -40,6 +40,7 @@ public class AdminServiceImpl implements AdminService {
                         .accountNumber(acc.getAccountNumber())
                         .balance(acc.getBalance())
                         .currency(acc.getCurrency())
+                        .id(acc.getId())
                         .build())
                 .toList();
     }
