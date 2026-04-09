@@ -5,35 +5,44 @@
 <h1 align="center">Global Finance API</h1>
 
 High-performance backend engine for a financial platform, built with **Java 21** and **Spring Boot 3**.
-This API handles multi-currency accounts, atomic transactions, and audit logs.
+This API handles multi-currency accounts, atomic transactions, audit logs, and high-speed data caching.
 
-## 🚀 Key Features
+🚀 **[Try the API live (Swagger UI)](https://global-finance-api-production.up.railway.app)**
+
+## Key Features
 
 * **Secure Authentication:** Robust user registration and login system powered by **JWT (JSON Web Tokens)** and Spring Security.
 * **Multi-Currency Management:** Create accounts in different currencies (EUR, USD, etc.) with automated balance tracking.
 * **Smart Transfers:** Atomic money transfers between accounts with **Real-Time Exchange Rates** integrated via external Financial APIs.
+* **High-Performance Caching:** Integrated **Redis** to cache heavy database queries (like financial analytics), reducing response times to milliseconds and preventing database overload.
 * **Financial Analytics:** Advanced spending statistics grouped by categories (Food, Rent, Leisure, etc.) using **JPQL Projections**.
 * **Transaction History:** Paginated and filterable transaction logs with custom date ranges.
-* **Data Integrity:** Strict validation layers (DTOs) and a centralized **Global Exception Handler** for clean API responses.
+* **Data Integrity & Resilience:** Strict validation layers (DTOs) and a centralized **Global Exception Handler** for clean, standardized API responses.
 
 ## Tech Stack
 
 * **Core:** Java 21, Spring Boot 3.2+
-* **Database:** PostgreSQL (Dockerized)
+* **Databases:** PostgreSQL (Relational) & Redis (In-Memory Cache)
 * **Security:** Spring Security, JWT
-* **API Documentation:** **SpringDoc OpenAPI (Swagger UI)**
-* **External Integrations:** **ExchangeRate-API** for real-time currency conversion
+* **Deployment & CI/CD:** Railway (Cloud Hosting), Docker
+* **API Documentation:** SpringDoc OpenAPI (Swagger UI)
+* **External Integrations:** ExchangeRate-API for real-time currency conversion
+* **Testing:** JUnit 5, Mockito
 * **Tools:** Lombok, Maven, Docker Compose
 
-## API Documentation
+## ☁️ Cloud Deployment (Production)
 
-Once the application is running, you can explore and test the API endpoints through the **Swagger UI** interactive interface:
+This project is fully deployed in the cloud using a **Continuous Deployment (CI/CD)** pipeline via **Railway**. Every update pushed to the repository is automatically built and deployed.
 
-🔗 **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)**
+The production infrastructure consists of:
+* A containerized **Spring Boot** application. 
+* A managed **PostgreSQL** database. 
+* A managed **Redis** instance for caching. 
+* Secure routing with HTTPS and proxy headers properly configured for production environments.
 
-The documentation includes detailed request/response schemas, security requirements, and example values for every endpoint.
+🔗 **[Access the Production Environment](https://global-finance-api-production.up.railway.app)**
 
-## Setup & Installation
+## Setup & Installation (Local Environment)
 
 **Prerequisites:**
 * Java 21 JDK
@@ -63,25 +72,24 @@ The documentation includes detailed request/response schemas, security requireme
     ```
 
 ## Monitoring & Documentation
+Once running locally, you can access the following tools:
 * **Swagger UI:** http://localhost:8080/swagger-ui.html
-
 * **Prometheus:** http://localhost:9090
-
-* **Grafana:** http://localhost:3000 (User: admin / Pass: admin1234)
+* **Grafana:** http://localhost:3000 (User: `admin` / Pass: `admin1234`)
 
 ## Project Structure
 
 ```text
 src/main/java/com/github/pmbdev/global_finance_api
-├── config/           # App configuration (Beans, PasswordEncoder)
+├── config/           # App configuration (Beans, OpenAPI, CORS)
 ├── controller/       # REST Endpoints (The entry point)
 │   └── dto/          # Data Transfer Objects (Requests/Responses)
-├── exception/        # Global Error Handling logic
-│   └── custom/       # Custom Error Handling logic
+├── exception/        # Global Error Handling (@ControllerAdvice)
+│   └── custom/       # Custom Exception definitions
 ├── repository/       # Data Access Layer (JPA Interfaces)
 │   └── entity/       # Database Tables (The core data models)
 │       └── enums/    # Enumerate Tables
 ├── security/         # JWT Filters & Security Config
-│   └── filter/       # Filters in Security
+│   └── filter/       # Authentication and Authorization filters
 └── service/          # Business Logic Interfaces
     └── impl/         # Business Logic Implementation (The brain)
