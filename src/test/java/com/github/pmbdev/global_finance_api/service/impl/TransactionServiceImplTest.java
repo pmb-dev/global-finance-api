@@ -100,7 +100,7 @@ class TransactionServiceImplTest {
         request.setConcept("Test transfer");
         request.setCategory(TransactionCategory.OTHERS);
 
-        // Mocks: Configurate account behaviours
+        // Mocks: Config account behaviors
         when(accountRepository.findByAccountNumber("ES123"))
                 .thenReturn(Optional.of(source));
 

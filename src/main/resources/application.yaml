@@ -1,36 +1,71 @@
+# ==========================================
+# SERVER CONFIGURATION
+# ==========================================
+server:
+  forward-headers-strategy: framework # Required for Railway/HTTPS proxy routing
+
+# ==========================================
+# SPRING CORE CONFIGURATION
+# ==========================================
 spring:
   application:
     name: global-finance-api
   
-  # DATABASE CONFIGURATION
+  # --- Database Configuration (PostgreSQL) ---
   datasource:
     url: jdbc:postgresql://localhost:5433/global_finance_db
     username: user
     password: admin123
     driver-class-name: org.postgresql.Driver
 
-  # JPA CONFIGURATION (Hibernate)
+  # --- ORM Configuration (Hibernate) ---
   jpa:
     hibernate:
-      ddl-auto: update  # CREATE AUTO TABLES
-    show-sql: true      # SHOW SQL QUERIES
+      ddl-auto: update  # Update schema automatically
+    show-sql: true      # Log SQL queries to console
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-  # REDIS CONFIGURATION
+  # --- Caching & Redis Configuration ---
   data:
     redis:
       host: localhost
       port: 6379
-    cache:
-      type: redis
+  cache:
+    type: redis         # Enable Redis as the default cache provider
 
+# ==========================================
+# CUSTOM APPLICATION PROPERTIES
+# ==========================================
 jwt:
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-  expiration: 86400000 # 1 day in ms
+  expiration: 86400000 # 1 day in milliseconds
 
+api:
+  exchangerate:
+    url: https://v6.exchangerate-api.com/v6/
+    key: 1313f6abc379b7f5006b9272
+
+# ==========================================
+# OBSERVABILITY & METRICS (Actuator)
+# ==========================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus,metrics"
+  endpoint:
+    health:
+      show-details: always # Show DB/Disk health details
+  metrics:
+    tags:
+      application: global-finance-api
+
+# ==========================================
+# API DOCUMENTATION (Swagger/OpenAPI)
+# ==========================================
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -39,20 +74,3 @@ springdoc:
   redoc:
     enabled: true
     path: /redoc.html
-
-api:
-  exchangerate:
-    url: https://v6.exchangerate-api.com/v6/
-    key: 1313f6abc379b7f5006b9272
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "health,info,prometheus,metrics"
-  endpoint:
-    health:
-      show-details: always # See if the DB is down from endpoint
-  metrics:
-    tags:
-      application: global-finance-api
