@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register", "/api/users/login").permitAll()
 
                         // OpenAPI/Swagger endpoints
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
+                        .requestMatchers("/","/v3/api-docs/**", "/swagger-ui/**",
                                 "/swagger-ui.html", "/swagger-resources/**",
                                 "/webjars/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
